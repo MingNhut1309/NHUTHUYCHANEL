@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Công Bằng App · Giao diện hoàn thiện 56 màn hình (ADM401)</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="app-shell">
+  <!-- TOPBAR TRÌNH BÀY -->
+  <header class="topbar">
+    <div class="topbar-brand">
+      <div class="topbar-logo" aria-hidden="true">
+        <svg width="24" height="24" viewBox="0 0 96 96" fill="none">
+          <g stroke="#FFFFFF" stroke-width="7" stroke-linecap="round">
+            <line x1="48" y1="16" x2="48" y2="25"/>
+            <line x1="71" y1="48" x2="80" y2="48"/>
+            <line x1="48" y1="71" x2="48" y2="80"/>
+            <line x1="16" y1="48" x2="25" y2="48"/>
+            <line x1="25" y1="25" x2="31" y2="31"/>
+            <line x1="25" y1="71" x2="31" y2="65"/>
+            <line x1="71" y1="71" x2="65" y2="65"/>
+          </g>
+          <path d="M36 49L45 58L63 39" stroke="#FFFFFF" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M68 20L70 26L76 28L70 30L68 36L66 30L60 28L66 26Z" fill="#E8B54A"/>
+        </svg>
+      </div>
+      <div class="topbar-title-group">
+        <h1>Ứng dụng Công Bằng · Prototype UI hoàn chỉnh</h1>
+        <p>Chuyển thể chuẩn xác từ Figma <code>CongBangApp.fig</code> (iPhone 17 · 402 × 874 pt)</p>
+      </div>
+    </div>
+
+    <div class="topbar-center">
+      <button id="btn-mode-sim" class="mode-btn active" onclick="setViewMode('sim')">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="2" width="12" height="20" rx="3"/><line x1="10" y1="18" x2="14" y2="18"/></svg>
+        Trình bày iPhone 17
+      </button>
+      <button id="btn-mode-grid" class="mode-btn" onclick="setViewMode('grid')">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+        Toàn cảnh 56 màn hình
+      </button>
+    </div>
+
+    <div class="topbar-actions">
+      <span class="count-pill">56 / 50+ màn hình</span>
+      <button class="shell-btn" onclick="toggleDesignModal(true)">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/></svg>
+        Hệ thống thiết kế
+      </button>
+    </div>
+  </header>
+
+  <!-- SIDEBAR DANH MỤC 56 MÀN HÌNH -->
+  <aside class="sidebar">
+    <div class="sidebar-search">
+      <input id="screen-search" type="text" placeholder="Tìm màn hình (vd: BHXH, OTP, lớp phủ...)" oninput="filterSidebar(this.value)">
+    </div>
+    <div id="sidebar-list" class="sidebar-list"></div>
+  </aside>
+
+  <!-- MAIN WORKSPACE -->
+  <main class="main-stage">
+    <!-- SIMULATOR VIEW -->
+    <section id="simulator-view" class="simulator-view">
+      <div class="sim-meta-bar">
+        <div class="sim-meta-info">
+          <span id="sim-cluster" class="sim-meta-cluster">01 · Làm quen · Thiết lập lần đầu</span>
+          <span id="sim-title" class="sim-meta-title">01 · Splash</span>
+        </div>
+        <div class="sim-nav-controls">
+          <button class="sim-nav-btn" onclick="prevScreen()" title="Phím mũi tên trái">← Trước</button>
+          <span id="sim-index" style="font-size:12px; color:#9CA8A3; min-width:54px; text-align:center;">01 / 56</span>
+          <button class="sim-nav-btn" onclick="nextScreen()" title="Phím mũi tên phải">Sau →</button>
+        </div>
+      </div>
+
+      <div id="phone-scale-wrap" class="phone-scale-wrap">
+        <div class="iphone-bezel">
+          <div id="iphone-screen" class="iphone-screen"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- GALLERY VIEW (56 MÀN HÌNH) -->
+    <section id="gallery-view" class="gallery-view">
+      <div class="gallery-header">
+        <div>
+          <h2>Toàn cảnh 56 màn hình · Giao diện hoàn thiện</h2>
+          <p>Bấm vào bất kỳ màn hình nào để mở trực tiếp trên máy ảo iPhone 17 và tương tác.</p>
+        </div>
+        <div id="gallery-filters" class="gallery-filters"></div>
+      </div>
+      <div id="gallery-content"></div>
+    </section>
+  </main>
+</div>
+
+<!-- MODAL HỆ THỐNG THIẾT KẾ -->
+<div id="design-modal" class="modal-mask" onclick="if(event.target===this) toggleDesignModal(false)">
+  <div class="modal-box">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+      <div>
+        <h2 style="font-size:18px; font-weight:700;">Hệ thống thiết kế · CongBangApp.fig</h2>
+        <p style="font-size:13px; color:#9CA8A3; margin-top:2px;">Biến màu, kiểu chữ Be Vietnam Pro & tỉ lệ chuẩn iPhone 17 (402 × 874 pt)</p>
+      </div>
+      <button class="shell-btn" onclick="toggleDesignModal(false)">Đóng</button>
+    </div>
+
+    <div class="swatch-grid">
+      <div class="swatch-item"><div class="swatch-dot" style="background:#0D5C48"></div><div style="font-size:12px;font-weight:700">Primary</div><div style="font-size:11px;color:#9CA8A3">#0D5C48</div></div>
+      <div class="swatch-item"><div class="swatch-dot" style="background:#083D30"></div><div style="font-size:12px;font-weight:700">Deep</div><div style="font-size:11px;color:#9CA8A3">#083D30</div></div>
+      <div class="swatch-item"><div class="swatch-dot" style="background:#E1EDE8"></div><div style="font-size:12px;font-weight:700">Soft</div><div style="font-size:11px;color:#9CA8A3">#E1EDE8</div></div>
+      <div class="swatch-item"><div class="swatch-dot" style="background:#E8B54A"></div><div style="font-size:12px;font-weight:700">Accent</div><div style="font-size:11px;color:#9CA8A3">#E8B54A</div></div>
+      <div class="swatch-item"><div class="swatch-dot" style="background:#1C7A4D"></div><div style="font-size:12px;font-weight:700">Success</div><div style="font-size:11px;color:#9CA8A3">#1C7A4D</div></div>
+      <div class="swatch-item"><div class="swatch-dot" style="background:#9A5308"></div><div style="font-size:12px;font-weight:700">Warning</div><div style="font-size:11px;color:#9CA8A3">#9A5308</div></div>
+      <div class="swatch-item"><div class="swatch-dot" style="background:#B0261C"></div><div style="font-size:12px;font-weight:700">Danger</div><div style="font-size:11px;color:#9CA8A3">#B0261C</div></div>
+      <div class="swatch-item"><div class="swatch-dot" style="background:#F4F3EF"></div><div style="font-size:12px;font-weight:700">Canvas</div><div style="font-size:11px;color:#9CA8A3">#F4F3EF</div></div>
+    </div>
+
+    <div style="margin-top:18px; padding:14px; background:#101614; border:1px solid var(--shell-border); border-radius:12px; font-size:13px; line-height:1.6; color:#CBD5D1;">
+      <div><strong>6 Cụm chức năng (56 màn hình):</strong></div>
+      <div>• Cụm 01 (01–08): Làm quen &amp; Thiết lập lần đầu (Splash, Chào mừng, SĐT, OTP, Quyền riêng tư, Lương, Ca làm, Hệ số tăng ca)</div>
+      <div>• Cụm 02 (09–16): Hằng ngày &amp; Ghi giờ công (Màn hình khoá, Trang chủ, Bảng trượt ghi giờ, Đã lưu, Lịch T11, Chi tiết ngày, Thông báo, Tài khoản)</div>
+      <div>• Cụm 03 (17–27): Phiếu lương &amp; Đối chiếu (Danh sách, Camera căn khung, Đã nhận diện, Đang đối chiếu, Ảnh mờ, Kiểm tra số, Sửa số, Kết quả thiếu 269.231đ, Chi tiết ngày thường/Chủ nhật, Tháng 9 khớp)</div>
+      <div>• Cụm 04 (28–35): BHXH &amp; Hành động (Theo dõi BHXH 40/44 tháng, Chi tiết tháng nợ, Cách xử lý 3 bước, Soạn đề nghị, Xem trước PDF, Đã chuẩn bị xong, Theo dõi đề nghị, Ghi phản hồi)</div>
+      <div>• Cụm 05 (36–40): Màn phụ (Lịch T10, Thông báo đã đọc hết, Đủ 12 ngày tăng ca, Điều 98 Luật LĐ, Chính sách quyền riêng tư)</div>
+      <div>• Cụm 06 (41–56): Lớp phủ &amp; thông báo (Chia sẻ, Bảng thao tác, Xác nhận xoá, Thông báo đồng bộ, 7 bảng chọn thiết lập/kỳ lương, Bàn phím chữ, Xem ảnh chấm công, 3 thông báo nhanh)</div>
+    </div>
+  </div>
+</div>
+
+<script src="js/helpers.js"></script>
+<script src="js/screens-part1.js"></script>
+<script src="js/screens-part2.js"></script>
+<script src="js/screens-part3.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
